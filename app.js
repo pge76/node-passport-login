@@ -3,13 +3,14 @@ const expressLayouts = require('express-ejs-layouts')
 const mongoose = require('mongoose')
 const flash = require('connect-flash');
 const session = require('express-session');
-
+const passport = require('passport');
+require('./config/passport')(passport);
 
 const app = express()
 
 
 // db config
-const db = require('./config/keys').MongoURI
+const db = require('./config/keys').MongoURI;
 
 // Connecto to Mongo
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -33,6 +34,12 @@ app.use(
     })
 );
 
+// PASSPORT
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // FLASH
 
 app.use(flash());
@@ -42,6 +49,7 @@ app.use(function(req, res, next) {
     res.locals.error = req.flash('error');
     next();
 });
+
 
 // ROUTES
 app.use('/', require('./routes/index'))
