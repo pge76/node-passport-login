@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+
 require('./config/passport')(passport);
+require('./config/passport-twitter')(passport)
 
 const app = express()
 
@@ -52,8 +54,10 @@ app.use(function(req, res, next) {
 
 
 // ROUTES
-app.use('/', require('./routes/index'))
-app.use('/users', require('./routes/users'))
+app.use('/',        require('./routes/index'))
+app.use('/users',   require('./routes/users'))
+app.use('/auth',    require('./routes/auth'))
+
 app.use(express.static('public'));
 
 const PORT = process.env.PORT || 5000
